@@ -10,20 +10,27 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script src ="static/location.js"></script>
     <link href="static/thumbcarousal.css" rel="stylesheet">
-</head>
+    <style>
+        body,table
+{
+    font-family: "Ubuntu", Helvetica, Arial, sans-serif!important;
+}
+    </style>
 </head>
 <body onload="getData()">
 <div id="wrapper">
         <input type="hidden" id="loctn" value="{{ location }}">
+
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                    <a href="#"><strong><em>
+                    <a href="#" style="color:white"><strong><em>
                         iTravel
                         </em></strong>
                     </a>
                 </li>
+
                 <li>
                     <a href="#" class="active">Dashboard</a>
                 </li>
@@ -43,32 +50,29 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="container-fluid">
-                <h3>Item Recommendation</h3>
+                <h3>Item Based Recommendation</h3>
                 <hr>
                 <div class="row">
                     <div class="col-sm-7">
                         <!--<h4>hey there {{email }} <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a></h4>-->
                         <div id="map-canvas"></div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                         <div class="table-responsive">
                             <table class="table table-hover" style="overflow: scroll">
                                 <thead>
                                   <tr>
-                                    <th>PlaceName</th>
-                                    <th>Address</th>
+                                    <th>PLACE</th>
+                                    <th>&emsp;ADDRESS</th>
                                   </tr>
                                 </thead>
+                                {% for message in location %}
+                                 <tr>
+                                    <td>{{ message[0] }}<br><small><em>Rating:</em>{{ message[4] }}</small></td>
+                                    <td>{{ message[3] }}</td>
+                                  </tr>
+                                {% endfor %}
                                 <tbody>
-                                  <tr>
-                                    <td>John</td>
-                                    <td>Doe</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Mary</td>
-                                    <td>Moe</td>
-                                  </tr>
-                                </tbody>
                             </table>
                         </div>
                     </div><!--end of table-->

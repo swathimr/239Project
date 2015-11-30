@@ -75,9 +75,8 @@ def Item_based():
     print "Item Based Filtering for Recommendations"
     recommendedplc_ib=functions.itemBasedFiltering(reviewdata.reviews,user_id,itemSimilarity)
     print recommendedplc_ib.keys() #send to shivani
+
     locations =[]
-
-
     for bid in recommendedplc_ib.keys():
         sql = ("SELECT B_NAME, LATITUDE, LONGITUDE, ADDRESS, RATING from BUSINESS_CA where B_ID = '%s'" % bid)
         cursor.execute(sql)
