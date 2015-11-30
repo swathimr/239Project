@@ -58,21 +58,20 @@ def Item_based():
     #to do : get place name and pic to show in ui
     print "Finding similar Places "
     similar_item=functions.mostSimilar(productData,"4iTRjN_uAdAb7_YZDVHJdg")
-    print dict(similar_item).keys()# to shivani
+    b_data=[]
     for bid in dict(similar_item).keys():
-        print "BID "
-        print bid
-        #sql = ("SELECT B_NAME, PHOTO_URL from BUSINESS_CA where B_ID = '%s'" % bid)
-        sql = ("SELECT B_NAME, PHOTO_URL from BUSINESS_CA where B_ID = '81IjU5L-t-QQwsE38C63hQ'" )
+        print "bid::"+bid
+        sql = ("SELECT B_NAME, PHOTO_URL from BUSINESS_CA where B_ID = '%s'" % bid)
         cursor.execute(sql)
         data = cursor.fetchone()
         print cursor._executed.decode("utf8")
-        print data
-        b_data = data #swathi: b_data is an array which has name and pic url
+        if data != None:
+            b_data.append(data)
+    print b_data
+
     print "Computing Item Similarity"
     itemSimilarity = functions.computeItemSimilarities(productData)
 
-    #get shop name,lat,long,rating for these shops write api
     print "Item Based Filtering for Recommendations"
     recommendedplc_ib=functions.itemBasedFiltering(reviewdata.reviews,user_id,itemSimilarity)
     print recommendedplc_ib.keys() #send to shivani
@@ -86,7 +85,7 @@ def Item_based():
         print data_map
         locations.append(data_map) #swathi : locations contains the data you need for map
         print "LOCATIONS"
-        print locations[0]
+    print locations
     return render_template('ItemRecommend.html')
 
 @app.route('/UserRecommend',methods=['GET'])
@@ -107,6 +106,10 @@ def graph():
 
 # recommendation api's starts here
 
+
+
+"""print " "
+
 print "Most similar reviewers/Users "
 print functions.mostSimilar(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")
 
@@ -115,8 +118,6 @@ print " "
 print "Place Recommendations for a user"
 print functions.getRecommendations(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")   #how much will one user like a particular  place
 
-
-"""print " "
 print " "
 
 productData = functions.flipPersonToPlaces(reviewdata.reviews)
