@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Item Based Recommendation</title>
+     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/simple-sidebar.css" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script src ="static/location.js"></script>
+    <link href="static/thumbcarousal.css" rel="stylesheet">
+</head>
+</head>
+<body onload="populateMap()">
+<div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#"><strong><em>
+                        iTravel
+                        </em></strong>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="active">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#" style="background:rgba(255, 255, 255, 0.2) none repeat scroll 0% 0%;">Item Recommendation</a>
+                </li>
+               <li>
+                    <a href="UserRecommend">User Based Recommendation</a>
+                </li>
+                <li>
+                    <a href="Graph">Graphs</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h3>Item Recommendation</h3>
+                        <!--<h4>hey there {{email }} <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a></h4>-->
+                        <div id="map-canvas"></div>
+                    </div>
+                </div> <!--enf of map div-->
+                 <hr/>
+                <h3>Similar Places</h3>
+                <!--slider-->
+                <div class="row">
+		<div class="span12">
+    	    <div class="well">
+                <div id="myCarousel" class="carousel slide">
+
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <!--<li data-target="#myCarousel" data-slide-to="2"></li>-->
+                </ol>
+
+                <!-- Carousel items -->
+                <div class="carousel-inner">
+
+                <div class="item active">
+                	<div class="row-fluid">
+                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
+                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
+                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
+                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
+                	</div><!--/row-fluid-->
+                </div><!--/item-->
+
+                <div class="item">
+                	<div class="row-fluid">
+                		<div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
+                		<div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
+                		<div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
+                		<div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
+                	</div><!--/row-fluid-->
+                </div>
+
+                </div><!--/carousel-inner-->
+
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+                </div><!--/myCarousel-->
+
+            </div><!--/well-->
+		</div>
+	</div>
+                <!--slider ends-->
+
+
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+</body>
+</html>

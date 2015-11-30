@@ -7,10 +7,8 @@
     <title>Home Page</title>
      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/simple-sidebar.css" rel="stylesheet">
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-    <script src ="static/location.js"></script>
 </head>
-<body onload="getLocation()">
+<body>
 <div id="wrapper">
 
         <!-- Sidebar -->
@@ -23,7 +21,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" style="background:rgba(255, 255, 255, 0.2) none repeat scroll 0% 0%;">Dashboard</a>
+                    <a href="#">Dashboard</a>
                 </li>
                 <li>
                     <a href="ItemRecommend">Item Recommendation</a>
@@ -32,7 +30,7 @@
                     <a href="UserRecommend">User Based Recommendation</a>
                 </li>
                 <li>
-                    <a href="Graph">Graphs</a>
+                    <a href="#" style="background:rgba(255, 255, 255, 0.2) none repeat scroll 0% 0%;">Graphs</a>
                 </li>
             </ul>
         </div>
@@ -43,10 +41,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h3>Near By Places</h3>
-                        <h5> {{email }} <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a></h5>
-
-                        <div id="map-canvas"></div>
+                        <h3>Cluster using Weka</h3>
+                        <h5> {{email }} </h5>
                     </div>
                 </div>
             </div>

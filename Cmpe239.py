@@ -51,7 +51,7 @@ def login():
     return render_template('UserHomePage.html',email=_email)
 
 @app.route('/ItemRecommend',methods=['GET'])
-def ItemRecommend():
+def Item_based():
     user_id="T9hGHsbJW9Hw1cJAlIAWmw"
     productData = functions.flipPersonToPlaces(reviewdata.reviews)
 
@@ -69,9 +69,13 @@ def ItemRecommend():
     print functions.itemBasedFiltering(reviewdata.reviews,user_id,itemSimilarity)
     return render_template('ItemRecommend.html')
 
-@app.route('/userRecommend',methods=['GET'])
+@app.route('/UserRecommend',methods=['GET'])
 def user_based():
-    return render_template('UserHomePage.html')
+    return render_template('UserRecommend.html')
+
+@app.route('/Graph')
+def graph():
+    return render_template('Graph.html')
 
 # recommendation api's starts here
 
