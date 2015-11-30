@@ -61,12 +61,14 @@ def Item_based():
 
     print "Computing Item Similarity"
     itemSimilarity = functions.computeItemSimilarities(productData)
-    print itemSimilarity
+
     print " "
 
     #get shop name,lat,long,rating for these shops write api
     print "Item Based Filtering for Recommendations"
-    print functions.itemBasedFiltering(reviewdata.reviews,user_id,itemSimilarity)
+    recommendedplc_ib=functions.itemBasedFiltering(reviewdata.reviews,user_id,itemSimilarity)
+    print recommendedplc_ib.keys() #send to shivani
+
     return render_template('ItemRecommend.html')
 
 @app.route('/UserRecommend',methods=['GET'])

@@ -40,7 +40,7 @@ function populateMap()//listedValues)
 
     mapholder = document.getElementById('map-canvas')
   mapholder.style.height = '400px';
-  mapholder.style.width = '60%';
+  mapholder.style.width = '100%';
     var map = new google.maps.Map(mapholder, {
       zoom: 10,
       center: new google.maps.LatLng(-33.92, 151.25),
