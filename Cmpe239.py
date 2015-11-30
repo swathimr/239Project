@@ -12,8 +12,8 @@ config = {
   'database': 'itravel',
   'raise_on_warnings': True,
 }
-#db = mysql.connector.connect(**config)
-
+db = mysql.connector.connect(**config)
+cursor = db.cursor()
 
 @app.route('/')
 def hello_world():
@@ -59,7 +59,16 @@ def Item_based():
     print "Finding similar Places "
     similar_item=functions.mostSimilar(productData,"4iTRjN_uAdAb7_YZDVHJdg")
     print dict(similar_item).keys()# to shivani
-
+    for bid in dict(similar_item).keys():
+        print "BID "
+        print bid
+        #sql = ("SELECT B_NAME, PHOTO_URL from BUSINESS_CA where B_ID = '%s'" % bid)
+        sql = ("SELECT B_NAME, PHOTO_URL from BUSINESS_CA where B_ID = '81IjU5L-t-QQwsE38C63hQ'" )
+        cursor.execute(sql)
+        data = cursor.fetchone()
+        print cursor._executed.decode("utf8")
+        print data
+        b_data = data #swathi: b_data is an array which has name and pic url
     print "Computing Item Similarity"
     itemSimilarity = functions.computeItemSimilarities(productData)
 
@@ -67,7 +76,17 @@ def Item_based():
     print "Item Based Filtering for Recommendations"
     recommendedplc_ib=functions.itemBasedFiltering(reviewdata.reviews,user_id,itemSimilarity)
     print recommendedplc_ib.keys() #send to shivani
-
+    locations =[]
+    #sql = ("SELECT B_NAME, LATITUDE, LONGITUDE, RATING from BUSINESS_CA where B_ID = '%s'" % bid)
+    sql = ("SELECT B_NAME, LATITUDE, LONGITUDE, RATING from BUSINESS_CA where B_ID = '81IjU5L-t-QQwsE38C63hQ'" )
+    for bid in recommendedplc_ib.keys():
+        cursor.execute(sql)
+        data_map = cursor.fetchone()
+        print cursor._executed.decode("utf8")
+        print data_map
+        locations.append(data_map) #swathi : locations contains the data you need for map
+        print "LOCATIONS"
+        print locations[0]
     return render_template('ItemRecommend.html')
 
 @app.route('/UserRecommend',methods=['GET'])
