@@ -50,7 +50,7 @@ def login():
     print _email+"::"+_password
     return render_template('UserHomePage.html',email=_email)
 
-@app.route('/ItemRecommend',methods=['GET'])
+@app.route('/ItemRecommend')
 def Item_based():
     user_id="T9hGHsbJW9Hw1cJAlIAWmw"
     productData = functions.flipPersonToPlaces(reviewdata.reviews)
@@ -76,17 +76,19 @@ def Item_based():
     recommendedplc_ib=functions.itemBasedFiltering(reviewdata.reviews,user_id,itemSimilarity)
     print recommendedplc_ib.keys() #send to shivani
     locations =[]
-    #sql = ("SELECT B_NAME, LATITUDE, LONGITUDE, RATING from BUSINESS_CA where B_ID = '%s'" % bid)
-    sql = ("SELECT B_NAME, LATITUDE, LONGITUDE, RATING from BUSINESS_CA where B_ID = '81IjU5L-t-QQwsE38C63hQ'" )
+
+
     for bid in recommendedplc_ib.keys():
+        sql = ("SELECT B_NAME, LATITUDE, LONGITUDE, ADDRESS, RATING from BUSINESS_CA where B_ID = '%s'" % bid)
         cursor.execute(sql)
         data_map = cursor.fetchone()
         print cursor._executed.decode("utf8")
-        print data_map
-        locations.append(data_map) #swathi : locations contains the data you need for map
-        print "LOCATIONS"
+        if data_map!=None:
+            value=[str(data_map[0]),float(data_map[1]),float(data_map[2]),str(data_map[3]),data_map[4]]
+            locations.append(value)
+    print "locations is"
     print locations
-    return render_template('ItemRecommend.html')
+    return render_template('ItemRecommend.html',location=locations)
 
 @app.route('/UserRecommend',methods=['GET'])
 def user_based():

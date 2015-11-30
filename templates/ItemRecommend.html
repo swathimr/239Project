@@ -12,9 +12,9 @@
     <link href="static/thumbcarousal.css" rel="stylesheet">
 </head>
 </head>
-<body onload="populateMap()">
+<body onload="getData()">
 <div id="wrapper">
-
+        <input type="hidden" id="loctn" value="{{ location }}">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
@@ -47,7 +47,6 @@
                 <hr>
                 <div class="row">
                     <div class="col-sm-7">
-
                         <!--<h4>hey there {{email }} <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a></h4>-->
                         <div id="map-canvas"></div>
                     </div>
@@ -56,21 +55,18 @@
                             <table class="table table-hover" style="overflow: scroll">
                                 <thead>
                                   <tr>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
-                                    <th>Email</th>
+                                    <th>PlaceName</th>
+                                    <th>Address</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
                                     <td>John</td>
                                     <td>Doe</td>
-                                    <td>john@example.com</td>
                                   </tr>
                                   <tr>
                                     <td>Mary</td>
                                     <td>Moe</td>
-                                    <td>mary@example.com</td>
                                   </tr>
                                 </tbody>
                             </table>
@@ -137,6 +133,11 @@
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
-    </script>
+function getData()
+{
+    locationlist =document.getElementById("loctn").value;
+    populateMap(locationlist);
+}
+</script>
 </body>
 </html>
