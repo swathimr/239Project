@@ -57,12 +57,11 @@ def Item_based():
 
     #to do : get place name and pic to show in ui
     print "Finding similar Places "
-    print functions.mostSimilar(productData,"4iTRjN_uAdAb7_YZDVHJdg")
+    similar_item=functions.mostSimilar(productData,"4iTRjN_uAdAb7_YZDVHJdg")
+    print dict(similar_item).keys()# to shivani
 
     print "Computing Item Similarity"
     itemSimilarity = functions.computeItemSimilarities(productData)
-
-    print " "
 
     #get shop name,lat,long,rating for these shops write api
     print "Item Based Filtering for Recommendations"
@@ -73,6 +72,14 @@ def Item_based():
 
 @app.route('/UserRecommend',methods=['GET'])
 def user_based():
+    print "Most similar reviewers/Users "
+    similar_user=functions.mostSimilar(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")
+    print dict(similar_user).keys() # to shivani
+    print " "
+
+    print "Place Recommendations for a user"
+    recommendplc_ub=functions.getRecommendations(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")   #how much will one user like a particular  place
+    print recommendplc_ub.keys() # to shivani
     return render_template('UserRecommend.html')
 
 @app.route('/Graph')
@@ -89,6 +96,8 @@ print " "
 print "Place Recommendations for a user"
 print functions.getRecommendations(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")   #how much will one user like a particular  place
 
+
+"""print " "
 print " "
 
 productData = functions.flipPersonToPlaces(reviewdata.reviews)
@@ -96,11 +105,6 @@ productData = functions.flipPersonToPlaces(reviewdata.reviews)
 print "Finding similar Places "
 print functions.mostSimilar(productData,"4iTRjN_uAdAb7_YZDVHJdg")   #Find similar places
 
-"""print " "
-print "This wont work we need to remove the below one alone"
-print "Finding user Recommendations for a product"
-print functions.getRecommendations(productData,"ZRm8fSEBn8DsSLD4o7T4hQ") #Out of the people Who havent seen the place Who will like this place ?
-print " "
 print "Computing Item Similarity"
 itemSimilarity = functions.computeItemSimilarities(productData)
 print itemSimilarity
