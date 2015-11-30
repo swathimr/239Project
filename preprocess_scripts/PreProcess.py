@@ -1,17 +1,18 @@
 import json,csv
 
 data = []
-fo = open('write.txt', 'a',16777216)
+fo = open('write.csv', 'a',16777216)
 
 #business script(business id,address,longitude,latitude,star)
-with open('business.json') as f:
+with open('/Users/Shivani/Desktop/MS/MSSESem3/CMPE239/project/business.json') as f:
     for line in f:
         if str(json.loads(line)["state"])=='CA':
-            val = str(json.loads(line)["business_id"])+","+str(json.loads(line)["stars"])+","+str(json.loads(line)["longitude"])+","+str(json.loads(line)["latitude"])+","+str(json.loads(line)["full_address"]).replace('\n','').replace(',','')
+            print line
+            val = str(json.loads(line)["business_id"])+","+str(json.loads(line)["name"])+","+str(json.loads(line)["stars"])+","+str(json.loads(line)["longitude"])+","+str(json.loads(line)["latitude"])+","+str(json.loads(line)["full_address"])
             fo.write(val+"\n")
 
-
-
+fo.close()
+'''
 #review script
 with open('review.json') as f:
     for line in f:
@@ -36,3 +37,4 @@ with open('review.json') as f:
             val = str(json.loads(line)["user_id"])+","+str(json.loads(line)["stars"])+","+str(json.loads(line)["business_id"])
             fo.write(val+"\n")
     fo.close()
+'''
