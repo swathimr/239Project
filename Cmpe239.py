@@ -1,7 +1,19 @@
-from flask import Flask,render_template,request,session
+from flask import Flask,render_template,request
 import functions,reviewdata
+import mysql.connector
 
 app = Flask(__name__)
+
+# sql connection
+config = {
+  'user': 'itravel',
+  'password': 'itravel239',
+  'host': 'recommendation-sys-instance.crkzapp5yylv.us-west-1.rds.amazonaws.com',
+  'database': 'itravel',
+  'raise_on_warnings': True,
+}
+#db = mysql.connector.connect(**config)
+
 
 @app.route('/')
 def hello_world():
@@ -38,9 +50,24 @@ def login():
     print _email+"::"+_password
     return render_template('UserHomePage.html',email=_email)
 
-@app.route('/itemRecommend',methods=['GET'])
-def item_based():
-    return render_template('UserHomePage.html')
+@app.route('/ItemRecommend',methods=['GET'])
+def ItemRecommend():
+    user_id="T9hGHsbJW9Hw1cJAlIAWmw"
+    productData = functions.flipPersonToPlaces(reviewdata.reviews)
+
+    #to do : get place name and pic to show in ui
+    print "Finding similar Places "
+    print functions.mostSimilar(productData,"4iTRjN_uAdAb7_YZDVHJdg")
+
+    print "Computing Item Similarity"
+    itemSimilarity = functions.computeItemSimilarities(productData)
+    print itemSimilarity
+    print " "
+
+    #get shop name,lat,long,rating for these shops write api
+    print "Item Based Filtering for Recommendations"
+    print functions.itemBasedFiltering(reviewdata.reviews,user_id,itemSimilarity)
+    return render_template('ItemRecommend.html')
 
 @app.route('/userRecommend',methods=['GET'])
 def user_based():
@@ -63,21 +90,18 @@ productData = functions.flipPersonToPlaces(reviewdata.reviews)
 print "Finding similar Places "
 print functions.mostSimilar(productData,"4iTRjN_uAdAb7_YZDVHJdg")   #Find similar places
 
-print " "
+"""print " "
 print "This wont work we need to remove the below one alone"
 print "Finding user Recommendations for a product"
 print functions.getRecommendations(productData,"ZRm8fSEBn8DsSLD4o7T4hQ") #Out of the people Who havent seen the place Who will like this place ?
 print " "
-
-
 print "Computing Item Similarity"
 itemSimilarity = functions.computeItemSimilarities(productData)
 print itemSimilarity
 print " "
 
 print "Item Based Filtering for Recommendations"
-print functions.itemBasedFiltering(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw",itemSimilarity)
-
+print functions.itemBasedFiltering(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw",itemSimilarity)"""
 
 if __name__ == '__main__':
     app.debug = True
