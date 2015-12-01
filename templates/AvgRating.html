@@ -4,7 +4,7 @@
      <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home Page</title>
+    <title>Ranking Graph</title>
      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/simple-sidebar.css" rel="stylesheet">
 </head>
@@ -37,10 +37,10 @@
                     <a href="UserRecommend">User Based Recommendation</a>
                 </li>
                 <li>
-                    <a href="#" style="background:rgba(255, 255, 255, 0.2) none repeat scroll 0% 0%;">Graphs</a>
+                    <a href="Graph">Graphs</a>
                 </li>
-                <li>
-                    <a href="AvgRating">Avg Rating</a>
+                 <li>
+                    <a href="#" style="background:rgba(255, 255, 255, 0.2) none repeat scroll 0% 0%;">Avg Rating</a>
                 </li>
             </ul>
         </div>
@@ -50,21 +50,15 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-offset-3 col-sm-6">
                         <h3>Most Popular zipCodes</h3>
                         </div>
-                    <div class="col-sm-6">
-                        <h3>Selected zipCodes</h3>
-                    </div>
                 </div>
                 <hr>
 
                 <div class="row">
-                    <div class="col-sm-6">
-                        <img src="{{url_for('static',filename='img/all_locations.png')}}" width="450">
-                    </div>
-                    <div class="col-sm-6">
-                        <img src="{{url_for('static',filename='img/selectedlocation.png')}}" width="450">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <img src="{{url_for('static',filename='img/avgrating.png')}}" width="550">
                     </div>
                 </div>
             </div>

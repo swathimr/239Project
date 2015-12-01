@@ -55,18 +55,17 @@ def Item_based():
     user_id="T9hGHsbJW9Hw1cJAlIAWmw"
     productData = functions.flipPersonToPlaces(reviewdata.reviews)
 
-    #to do : get place name and pic to show in ui
     print "Finding similar Places "
     similar_item=functions.mostSimilar(productData,"4iTRjN_uAdAb7_YZDVHJdg")
     b_data=[]
     for bid in dict(similar_item).keys():
         print "bid::"+bid
-        sql = ("SELECT B_NAME, PHOTO_URL from BUSINESS_CA where B_ID = '%s'" % bid)
+        sql = ("SELECT B_NAME, PHOTO_URL,RATING from BUSINESS_CA where B_ID = '%s'" % bid)
         cursor.execute(sql)
         data = cursor.fetchone()
         print cursor._executed.decode("utf8")
         if data != None:
-            b_data.append(data)
+            b_data.append([data[0],data[1],data[2]])
     print b_data
 
     print "Computing Item Similarity"
@@ -87,7 +86,7 @@ def Item_based():
             locations.append(value)
     print "locations is"
     print locations
-    return render_template('ItemRecommend.html',location=locations)
+    return render_template('ItemRecommend.html',location=locations,similarplaces=b_data)
 
 @app.route('/UserRecommend',methods=['GET'])
 def user_based():
@@ -104,6 +103,10 @@ def user_based():
 @app.route('/Graph')
 def graph():
     return render_template('Graph.html')
+
+@app.route('/AvgRating')
+def rating_graph():
+    return render_template('AvgRating.html')
 
 # recommendation api's starts here
 

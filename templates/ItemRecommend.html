@@ -13,14 +13,13 @@
     <style>
         body,table
 {
-    font-family: "Ubuntu", Helvetica, Arial, sans-serif!important;
+            font-family: 'Poller One';
 }
     </style>
 </head>
 <body onload="getData()">
 <div id="wrapper">
         <input type="hidden" id="loctn" value="{{ location }}">
-
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
@@ -42,6 +41,9 @@
                 </li>
                 <li>
                     <a href="Graph">Graphs</a>
+                </li>
+                <li>
+                    <a href="AvgRating">Avg Rating</a>
                 </li>
             </ul>
         </div>
@@ -94,23 +96,25 @@
                 <!-- Carousel items -->
                 <div class="carousel-inner">
 
-                <div class="item active">
+                <div class="item-active">
                 	<div class="row-fluid">
-                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
-                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
-                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
-                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
+
+                        {% for similar in similarplaces %}
+                            <div class="col-sm-3"><a href="#x" class="thumbnail"><img src={{ similar[1] }} alt="Image" style="max-width:100%;" /></a>
+                                <p>{{ similar[0] }}<br/><span class="glyphicon glyphicon-certificate" aria-hidden="true"></span>&nbsp;{{ similar[2] }}</p></div>
+                        {% endfor %}
                 	</div><!--/row-fluid-->
                 </div><!--/item-->
 
+                 <!--{% if similarplaces|count > 4 %}
                 <div class="item">
                 	<div class="row-fluid">
-                		<div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
-                		<div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
-                		<div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
-                		<div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
-                	</div><!--/row-fluid-->
+                        {% for similar in similarplaces(4,8) %}
+                        <div class="col-sm-3"><a href="#x" class="thumbnail"><img src={{ similar[1] }} alt="Image" style="max-width:100%;" /></a></div>
+                	    {% endfor %}
+                    </div><!--/row-fluid-->
                 </div>
+                 {% endif %}-->
 
                 </div><!--/carousel-inner-->
 
