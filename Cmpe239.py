@@ -3,8 +3,8 @@ import random
 from flask import Flask,render_template,request
 import functions,reviewdata
 import mysql.connector
-from pyzipcode import ZipCodeDatabase
-zcdb = ZipCodeDatabase()
+#from pyzipcode import ZipCodeDatabase
+#zcdb = ZipCodeDatabase()
 app = Flask(__name__)
 
 # sql connection
@@ -106,6 +106,7 @@ def Item_based():
         data_map = cursor.fetchone()
         print cursor._executed.decode("utf8")
         if data_map!=None:
+            print str(data_map[0])
             value=[str(data_map[0]),float(data_map[1]),float(data_map[2]),str(data_map[3]),data_map[4]]
             locations.append(value)
     print "locations is"
@@ -118,19 +119,18 @@ def user_based():
     similar_user=functions.mostSimilar(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")
     u_data = []
     print dict(similar_user).keys() # to shivani
-    print " "
     print "###########"
     for uid in dict(similar_user).keys():
         print "UID "
         print uid
         sql = ("SELECT USER_NAME from USER where USER_ID = '%s'" % uid)
-        #sql = ("SELECT USER_NAME from USER where USER_ID = 'T9hGHsbJW9Hw1cJAlIAWmw'" )
         cursor.execute(sql)
         data = cursor.fetchone()
         print cursor._executed.decode("utf8")
         print data
         if data != None:
-            u_data.append(data)
+            rating= random.randint(3,5)
+            u_data.append([data[0],rating])
     print "U_DATA"
     print u_data
     print "###########"
@@ -162,34 +162,8 @@ def graph():
 def rating_graph():
     return render_template('AvgRating.html')
 
-# recommendation api's starts here
 
 
-
-"""print " "
-
-print "Most similar reviewers/Users "
-print functions.mostSimilar(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")
-
-print " "
-
-print "Place Recommendations for a user"
-print functions.getRecommendations(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")   #how much will one user like a particular  place
-
-print " "
-
-productData = functions.flipPersonToPlaces(reviewdata.reviews)
-
-print "Finding similar Places "
-print functions.mostSimilar(productData,"4iTRjN_uAdAb7_YZDVHJdg")   #Find similar places
-
-print "Computing Item Similarity"
-itemSimilarity = functions.computeItemSimilarities(productData)
-print itemSimilarity
-print " "
-
-print "Item Based Filtering for Recommendations"
-print functions.itemBasedFiltering(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw",itemSimilarity)"""
 
 if __name__ == '__main__':
     app.debug = True
