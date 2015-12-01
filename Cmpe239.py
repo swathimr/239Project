@@ -76,14 +76,14 @@ def login():
 
 @app.route('/ItemRecommend')
 def Item_based():
-    user_id="T9hGHsbJW9Hw1cJAlIAWmw"
+    user_id="Z_WAxc4RUpKp3y12BH1bEg"
     productData = functions.flipPersonToPlaces(reviewdata.reviews)
 
     print "Finding similar Places "
     similar_item=functions.mostSimilar(productData,"4iTRjN_uAdAb7_YZDVHJdg")
+    print dict(similar_item)
     b_data=[]
     for bid in dict(similar_item).keys():
-        print "bid::"+bid
         sql = ("SELECT B_NAME, PHOTO_URL,RATING from BUSINESS_CA where B_ID = '%s'" % bid)
         cursor.execute(sql)
         data = cursor.fetchone()
@@ -137,7 +137,6 @@ def user_based():
 
     print "Place Recommendations for a user"
     recommendplc_ub=functions.getRecommendations(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")   #how much will one user like a particular  place
-    print recommendplc_ub.keys() # to shivani
 
     print "************"
     locations =[]
@@ -145,13 +144,11 @@ def user_based():
         sql = ("SELECT B_NAME, LATITUDE, LONGITUDE, ADDRESS, RATING from BUSINESS_CA where B_ID = '%s'" % bid)
         cursor.execute(sql)
         data_map = cursor.fetchone()
-        print cursor._executed.decode("utf8")
         if data_map!=None:
             value=[str(data_map[0]),float(data_map[1]),float(data_map[2]),str(data_map[3]),data_map[4]]
             locations.append(value)
     print "locations is"
     print locations
-    print "*************"
     return render_template('UserRecommend.html', location=locations,similarusers=u_data)
 
 @app.route('/Graph')
