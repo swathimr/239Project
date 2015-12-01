@@ -8,7 +8,7 @@
      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/simple-sidebar.css" rel="stylesheet">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-    <script src ="static/location.js"></script>
+    <script src ="static/multiplelocation.js"></script>
     <link href="static/thumbcarousal.css" rel="stylesheet">
     <style>
         body,table
@@ -19,7 +19,7 @@
 </head>
 <body onload="getData()">
 <div id="wrapper">
-        <input type="hidden" id="loctn" value="{{ location }}">
+
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
@@ -31,7 +31,7 @@
                 </li>
 
                 <li>
-                    <a href="#" class="active">Dashboard</a>
+                    <a href="dashboard" class="active">Dashboard</a>
                 </li>
                 <li>
                     <a href="#" style="background:rgba(255, 255, 255, 0.2) none repeat scroll 0% 0%;">Item Recommendation</a>
@@ -143,8 +143,8 @@
     });
 function getData()
 {
-    locationlist =document.getElementById("loctn").value;
-    populateMap(locationlist);
+    var locationValue = {{ location|safe }}
+    populateMap(locationValue);
 }
 </script>
 </body>

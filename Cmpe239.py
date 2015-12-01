@@ -118,7 +118,7 @@ def user_based():
     print "Most similar reviewers/Users "
     similar_user=functions.mostSimilar(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")
     u_data = []
-    print dict(similar_user).keys() # to shivani
+    print dict(similar_user).keys()
     print "###########"
     for uid in dict(similar_user).keys():
         print "UID "
@@ -162,7 +162,9 @@ def graph():
 def rating_graph():
     return render_template('AvgRating.html')
 
-
+@app.route('/dashboard')
+def dashboard():
+    return render_template('UserHomePage.html')
 
 
 if __name__ == '__main__':
