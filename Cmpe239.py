@@ -1,7 +1,10 @@
+import random
+
 from flask import Flask,render_template,request
 import functions,reviewdata
 import mysql.connector
-
+from pyzipcode import ZipCodeDatabase
+zcdb = ZipCodeDatabase()
 app = Flask(__name__)
 
 # sql connection
@@ -23,6 +26,27 @@ def hello_world():
 @app.route('/hello/')
 def hello(name=None):
     return render_template('WelcomePage.html')
+
+@app.route('/dashboard', methods=['POST'])
+def hello1():
+    _zip = request.form['zip']
+    print _zip
+    zip_data =[]
+    for z in zcdb.get_zipcodes_around_radius(_zip, 10):
+        print "Z IS"
+        print z.zip
+        sql = "SELECT B_NAME, PHOTO_URL, RATING, ADDRESS from BUSINESS_CA WHERE ADDRESS LIKE '%' ORDER BY RATING DESC LIMIT 10"
+        cursor.execute(sql)
+        data = cursor.fetchall()
+        print "$$$$$$$$$ DATA $$$$$$$$$"
+        print data
+        print cursor._executed.decode("utf-8")
+        if data != None:
+            zip_data.append([data[0],data[1],data[2], data[3], data[4],data[5],data[6],data[7],data[8],data[9]])
+    print "@@@@@@ ZIP DATA @@@@@@@@"
+    print zip_data
+    return render_template('Dashboard.html', zipData = zip_data)
+
 
 @app.route('/signUp',methods=['POST'])
 def signUp():
@@ -92,13 +116,43 @@ def Item_based():
 def user_based():
     print "Most similar reviewers/Users "
     similar_user=functions.mostSimilar(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")
+    u_data = []
     print dict(similar_user).keys() # to shivani
     print " "
+    print "###########"
+    for uid in dict(similar_user).keys():
+        print "UID "
+        print uid
+        sql = ("SELECT USER_NAME from USER where USER_ID = '%s'" % uid)
+        #sql = ("SELECT USER_NAME from USER where USER_ID = 'T9hGHsbJW9Hw1cJAlIAWmw'" )
+        cursor.execute(sql)
+        data = cursor.fetchone()
+        print cursor._executed.decode("utf8")
+        print data
+        if data != None:
+            u_data.append(data)
+    print "U_DATA"
+    print u_data
+    print "###########"
 
     print "Place Recommendations for a user"
     recommendplc_ub=functions.getRecommendations(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")   #how much will one user like a particular  place
     print recommendplc_ub.keys() # to shivani
-    return render_template('UserRecommend.html')
+
+    print "************"
+    locations =[]
+    for bid in recommendplc_ub.keys():
+        sql = ("SELECT B_NAME, LATITUDE, LONGITUDE, ADDRESS, RATING from BUSINESS_CA where B_ID = '%s'" % bid)
+        cursor.execute(sql)
+        data_map = cursor.fetchone()
+        print cursor._executed.decode("utf8")
+        if data_map!=None:
+            value=[str(data_map[0]),float(data_map[1]),float(data_map[2]),str(data_map[3]),data_map[4]]
+            locations.append(value)
+    print "locations is"
+    print locations
+    print "*************"
+    return render_template('UserRecommend.html', location=locations,similarusers=u_data)
 
 @app.route('/Graph')
 def graph():

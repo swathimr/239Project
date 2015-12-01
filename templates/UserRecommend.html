@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <meta charset="utf-8">
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>User Based Recommendation</title>
-     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/simple-sidebar.css" rel="stylesheet">
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script src ="static/location.js"></script>
     <link href="static/thumbcarousal.css" rel="stylesheet">
+    <style>
+        body,table
+    {
+            font-family: 'Poller One';
+    }
+    </style>
 </head>
-</head>
-<body onload="populateMap()">
-<div id="wrapper">
 
+<body onload="getData()">
+<div id="wrapper">
+        <input type="hidden" id="loctn" value="{{ location }}">
+        <input type="hidden" id="userid" value="{{ similarusers }}">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
@@ -46,12 +53,32 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="container-fluid">
+                <h3>User Based Recommendation</h3>
+                <hr>
                 <div class="row">
                     <div class="col-sm-7">
-                        <h3>User Based Recommendation</h3>
                         <!--<h4>hey there {{email }} <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a></h4>-->
                         <div id="map-canvas"></div>
                     </div>
+                    <div class="col-sm-5">
+                        <div class="table-responsive">
+                            <table class="table table-hover" style="overflow: scroll">
+                                <thead>
+                                  <tr>
+                                    <th>PLACE</th>
+                                    <th>&emsp;ADDRESS</th>
+                                  </tr>
+                                </thead>
+                                {% for message in location %}
+                                 <tr>
+                                    <td>{{ message[0] }}<br><small><em>Rating:</em>{{ message[4] }}</small></td>
+                                    <td>{{ message[3] }}</td>
+                                  </tr>
+                                {% endfor %}
+                                <tbody>
+                            </table>
+                        </div>
+                    </div><!--end of table-->
                 </div> <!--enf of map div-->
                  <hr/>
                 <h3>Similar Users Like You</h3>
@@ -72,10 +99,11 @@
 
                 <div class="item active">
                 	<div class="row-fluid">
-                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
-                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
-                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
-                	  <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="http://placehold.it/250x250" alt="Image" style="max-width:100%;" /></a></div>
+                	  {% for similar in similarusers %}
+                            <div class="col-sm-3"><a href="#x" class="thumbnail">
+                            <img src="http://s5.postimg.org/4xpbh5oo3/user_000000_128.png" alt="" class="img-responsive" id="patientimg" name="patientimg" style="height:140px;width:140px;font-size:30px;text-align:center;color:gray;"/></a>
+                                <p>{{ similar[0] }}<br/><span class="glyphicon glyphicon-certificate" aria-hidden="true"></span>&nbsp;{{ similar[2] }}</p></div>
+                        {% endfor %}
                 	</div><!--/row-fluid-->
                 </div><!--/item-->
 
@@ -113,6 +141,14 @@
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
+
+    function getData()
+    {
+        userlist = document.getElementById("userid").value;
+        locationlist =document.getElementById("loctn").value;
+        populateMap(locationlist);
+
+    }
     </script>
 </body>
 </html>
