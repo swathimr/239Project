@@ -1,12 +1,13 @@
 import random
 
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,redirect,session
 import functions,reviewdata
+import reviewdata1
 import mysql.connector
 #from pyzipcode import ZipCodeDatabase
 #zcdb = ZipCodeDatabase()
 app = Flask(__name__)
-
+app.secret_key = 'TeStKeY'
 # sql connection
 config = {
   'user': 'itravel',
@@ -15,6 +16,7 @@ config = {
   'database': 'itravel',
   'raise_on_warnings': True,
 }
+
 db = mysql.connector.connect(**config)
 cursor = db.cursor()
 
@@ -23,7 +25,7 @@ def hello_world():
     return 'Hello World!'
 
 
-@app.route('/hello/')
+@app.route('/itravel/')
 def hello(name=None):
     return render_template('WelcomePage.html')
 
@@ -48,38 +50,25 @@ def hello1():
     return render_template('Dashboard.html', zipData = zip_data)
 
 
-@app.route('/signUp',methods=['POST'])
-def signUp():
-
-    # read the posted values from the UI
-    _name = request.form['name']
-    _email = request.form['email']
-    _password = request.form['password']
-   # session['username'] = request.form['name']
-
-    #add user information into db
-
-    print _email+"::"+_name+"::"+_password
-    return render_template('UserHomePage.html',email=_email)
-
 @app.route('/login',methods=['POST'])
 def login():
-
-    # read the posted values from the UI
+    session.clear
     _email = request.form['email']
-    _password = request.form['password']
-    """check for user ifno in db
-    if exists navigate to homwpage
-    else stay in same page with proper error message"""
-    print _email+"::"+_password
-    return render_template('UserHomePage.html',email=_email)
+    sql = ("SELECT USER_ID from USER where USER_EMAIL = '%s'" % _email)
+    cursor.execute(sql)
+    data = cursor.fetchone()
+    if data!=None:
+        session['user_id']=data
+        print "Welcome user::"+session['user_id'][0]
+        return render_template('UserHomePage.html',user_id=data)
+    else:
+        return redirect('itravel')
 
 @app.route('/ItemRecommend')
 def Item_based():
-    user_id="Z_WAxc4RUpKp3y12BH1bEg"
-    productData = functions.flipPersonToPlaces(reviewdata.reviews)
-
-    print "Finding similar Places "
+    user_id=session['user_id'][0]
+    productData = functions.flipPersonToPlaces(reviewdata1.reviews)
+    print "Finding similar Places " # for single place
     similar_item=functions.mostSimilar(productData,"4iTRjN_uAdAb7_YZDVHJdg")
     print dict(similar_item)
     b_data=[]
@@ -87,16 +76,16 @@ def Item_based():
         sql = ("SELECT B_NAME, PHOTO_URL,RATING from BUSINESS_CA where B_ID = '%s'" % bid)
         cursor.execute(sql)
         data = cursor.fetchone()
-        print cursor._executed.decode("utf8")
         if data != None:
             b_data.append([data[0],data[1],data[2]])
     print b_data
-
-    print "Computing Item Similarity"
+    print "******************"
+    print "Computing Item Similarity" # for entire product data
     itemSimilarity = functions.computeItemSimilarities(productData)
-
+    print itemSimilarity
+    print "******************"
     print "Item Based Filtering for Recommendations"
-    recommendedplc_ib=functions.itemBasedFiltering(reviewdata.reviews,user_id,itemSimilarity)
+    recommendedplc_ib=functions.itemBasedFiltering(reviewdata1.reviews,str(user_id),itemSimilarity)
     print recommendedplc_ib.keys() #send to shivani
 
     locations =[]
@@ -104,9 +93,7 @@ def Item_based():
         sql = ("SELECT B_NAME, LATITUDE, LONGITUDE, ADDRESS, RATING from BUSINESS_CA where B_ID = '%s'" % bid)
         cursor.execute(sql)
         data_map = cursor.fetchone()
-        print cursor._executed.decode("utf8")
         if data_map!=None:
-            print str(data_map[0])
             value=[str(data_map[0]),float(data_map[1]),float(data_map[2]),str(data_map[3]),data_map[4]]
             locations.append(value)
     print "locations is"
@@ -115,19 +102,17 @@ def Item_based():
 
 @app.route('/UserRecommend',methods=['GET'])
 def user_based():
+    user_id=session['user_id'][0]
     print "Most similar reviewers/Users "
-    similar_user=functions.mostSimilar(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")
+    similar_user=functions.mostSimilar(reviewdata1.reviews,str(user_id))
+    #similar_user=functions.mostSimilar(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")
     u_data = []
     print dict(similar_user).keys()
     print "###########"
     for uid in dict(similar_user).keys():
-        print "UID "
-        print uid
         sql = ("SELECT USER_NAME from USER where USER_ID = '%s'" % uid)
         cursor.execute(sql)
         data = cursor.fetchone()
-        print cursor._executed.decode("utf8")
-        print data
         if data != None:
             rating= random.randint(3,5)
             u_data.append([data[0],rating])
@@ -136,7 +121,7 @@ def user_based():
     print "###########"
 
     print "Place Recommendations for a user"
-    recommendplc_ub=functions.getRecommendations(reviewdata.reviews,"T9hGHsbJW9Hw1cJAlIAWmw")   #how much will one user like a particular  place
+    recommendplc_ub=functions.getRecommendations(reviewdata1.reviews,str(user_id))   #how much will one user like a particular  place
 
     print "************"
     locations =[]
@@ -147,8 +132,6 @@ def user_based():
         if data_map!=None:
             value=[str(data_map[0]),float(data_map[1]),float(data_map[2]),str(data_map[3]),data_map[4]]
             locations.append(value)
-    print "locations is"
-    print locations
     return render_template('UserRecommend.html', location=locations,similarusers=u_data)
 
 @app.route('/Graph')
@@ -163,6 +146,17 @@ def rating_graph():
 def dashboard():
     return render_template('UserHomePage.html')
 
+# dummy functionality
+@app.route('/signUp',methods=['POST'])
+def signUp():
+
+    # read the posted values from the UI
+    _name = request.form['name']
+    _email = request.form['email']
+    _password = request.form['password']
+    #add user information into db
+    print _email+"::"+_name+"::"+_password
+    return render_template('UserHomePage.html',email=_email)
 
 if __name__ == '__main__':
     app.debug = True

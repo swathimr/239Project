@@ -33,7 +33,7 @@ def mostSimilar(data,person1):
 				scores[person] = thisDistance
 
 	scores=sorted(scores.items(), key=lambda scores:scores[1])
-	return scores
+	return scores[:4]
 
 
 def pearsonDistance(data, person1, person2):
@@ -97,7 +97,6 @@ def flipPersonToPlaces(data):
 	return result
 
 def computeItemSimilarities(data):
-	places = getListOfPlaces(data)
 
 	itemSimiliarty = {}
 	for place in data.keys():
@@ -129,8 +128,8 @@ def getRecommendations(data,person):
 		if cnt > 0:
 			thisPlaceRating = thisPlaceRating /cnt
 			placeRecommendations[place] = thisPlaceRating
-
-	return placeRecommendations
+	placeRec=sorted(placeRecommendations.items(), key=lambda placeRecommendations:placeRecommendations[1])
+	return placeRec[:20]
 
 
 def itemBasedFiltering(data,person,itemSimiliarty):
@@ -149,11 +148,13 @@ def itemBasedFiltering(data,person,itemSimiliarty):
 	for uplc in unWatchedPlaces:
 		placeRating = 0
 		normalizingFactor = 0
-		for plc in watchedPlaces:
-			if plc in dict(itemSimiliarty[uplc]):
-				placeRating += 	data[person][plc]*dict(itemSimiliarty[uplc])[plc]
-				normalizingFactor +=dict(itemSimiliarty[uplc])[plc]
-		if normalizingFactor!=0:
-			placeRating /= normalizingFactor
-		recommendations[uplc] = placeRating
+		if len(recommendations)<15:
+			for plc in watchedPlaces:
+				if plc in dict(itemSimiliarty[uplc]):
+					placeRating += 	data[person][plc]*dict(itemSimiliarty[uplc])[plc]
+					normalizingFactor +=dict(itemSimiliarty[uplc])[plc]
+			if normalizingFactor!=0:
+				placeRating /= normalizingFactor
+			recommendations[uplc] = placeRating
+			print str(uplc)+"::"+str(recommendations[uplc])
 	return recommendations
